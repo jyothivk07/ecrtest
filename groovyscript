@@ -1,0 +1,46 @@
+node {
+
+  
+  stage ('checkout') {
+
+    
+  git 'https://github.com/jyothivk07/ecrtest.git'
+ 
+  
+ }
+    
+  
+  stage('permissions'){
+ 
+  sh 'sudo chmod 777 /var/run/docker.sock'
+  
+ 
+}
+ 
+  stage ('docker build') {
+  
+  sh ' docker build -t testrepo .'
+
+ }
+
+
+  stage('tag') {
+        
+  sh 'docker tag testrepo:latest 494502565497.dkr.ecr.us-east-2.amazonaws.com/testrepo:latest'
+    
+
+}
+ 
+  stage('push')
+
+
+  docker.withRegistry('http://494502565497.dkr.ecr.us-east-2.amazonaws.com/testrepo', 'ecr:us-
+
+east-2:testrepo-ecr-credentials'){
+
+
+  sh 'docker push 494502565497.dkr.ecr.us-east-2.amazonaws.com/testrepo:latest'
+
+  }
+
+}
